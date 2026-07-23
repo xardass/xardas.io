@@ -18,24 +18,56 @@
       background: #191715;
       isolation: isolate;
     }
+    .page::before {
+      content: '';
+      position: absolute;
+      z-index: 0;
+      inset: -18%;
+      pointer-events: none;
+      background: radial-gradient(ellipse at 25% 28%, rgba(154,146,133,.09) 0%, rgba(112,105,94,.045) 20%, transparent 48%);
+      filter: blur(32px);
+    }
+    .page::after {
+      content: '';
+      position: absolute;
+      z-index: 3;
+      inset: 0;
+      pointer-events: none;
+      opacity: .025;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.8'/%3E%3C/svg%3E");
+      mix-blend-mode: soft-light;
+    }
     .tower-glimpse {
       position: absolute;
       top: 0;
       left: 0;
-      width: min(82vw, 72rem);
-      height: min(78vh, 50rem);
+      width: min(82vw, 72rem, 117vh);
+      aspect-ratio: 3 / 2;
+      z-index: 1;
       pointer-events: none;
       opacity: .28;
-      background: url('./xardas-tower.png') left top / contain no-repeat;
+      background: url('./xardas-tower.png') center / 100% 100% no-repeat;
       filter: saturate(.58) sepia(.10) brightness(.72) contrast(1.04);
-      -webkit-mask-image: radial-gradient(ellipse at top left, #000 0%, rgba(0,0,0,.92) 34%, transparent 76%);
-      mask-image: radial-gradient(ellipse at top left, #000 0%, rgba(0,0,0,.92) 34%, transparent 76%);
+      -webkit-mask-image: radial-gradient(ellipse 28% 38% at 30% 38%, #000 0%, rgba(0,0,0,.96) 30%, rgba(0,0,0,.72) 54%, rgba(0,0,0,.34) 74%, rgba(0,0,0,.10) 89%, transparent 100%);
+      mask-image: radial-gradient(ellipse 28% 38% at 30% 38%, #000 0%, rgba(0,0,0,.96) 30%, rgba(0,0,0,.72) 54%, rgba(0,0,0,.34) 74%, rgba(0,0,0,.10) 89%, transparent 100%);
+    }
+    .wordmark {
+      position: absolute;
+      top: clamp(1.2rem, 2.5vw, 2.2rem);
+      right: clamp(1.15rem, 2.5vw, 2.2rem);
+      z-index: 2;
+      margin: 0;
+      color: rgba(231,225,209,.32);
+      font: 500 clamp(.58rem, .7vw, .68rem)/1 Georgia, serif;
+      letter-spacing: .48em;
+      text-transform: uppercase;
+      user-select: none;
     }
     .contact-sigil {
       position: absolute;
       left: clamp(1.15rem, 2.4vw, 2.2rem);
       bottom: clamp(1.1rem, 2.4vw, 2rem);
-      z-index: 1;
+      z-index: 2;
       width: clamp(13rem, 22vw, 19rem);
       height: clamp(2.6rem, 4.8vw, 3.5rem);
       opacity: .78;
@@ -43,14 +75,25 @@
       border: 0;
       padding: 0;
       background: transparent;
+      transform-origin: left center;
+      transition: opacity 220ms ease, transform 220ms ease, filter 220ms ease;
     }
     .contact-sigil canvas { display: block; width: 100%; height: 100%; }
+    .contact-sigil:hover,
+    .contact-sigil:focus-visible {
+      opacity: 1;
+      transform: translateX(3px);
+      filter: drop-shadow(0 0 9px rgba(221,213,192,.12));
+    }
     .contact-sigil:focus-visible { outline: 1px solid rgba(232,225,207,.55); outline-offset: 6px; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .contact-sigil { transition: none; }
+    }
 
     @media (max-width: 720px) {
       .tower-glimpse {
         width: 100vw;
-        height: 62vh;
         opacity: .24;
       }
       .contact-sigil {
@@ -65,6 +108,7 @@
 <body>
   <main class="page" aria-label="Xardas landing page">
     <div class="tower-glimpse" aria-hidden="true"></div>
+    <p class="wordmark">Xardas</p>
     <button class="contact-sigil" type="button" aria-label="Email Xavier">
       <canvas></canvas>
     </button>
@@ -86,17 +130,10 @@
       ctx.clearRect(0, 0, rect.width, rect.height);
       const y = rect.height * .53;
 
-      ctx.strokeStyle = 'rgba(226,219,199,.28)';
-      ctx.lineWidth = 1;
-      ctx.beginPath();
-      ctx.moveTo(0, y + 11);
-      ctx.lineTo(Math.min(26, rect.width * .12), y + 11);
-      ctx.stroke();
-
       ctx.fillStyle = 'rgba(237,231,214,.90)';
       ctx.font = `${Math.max(15, Math.min(21, rect.height * .43))}px Georgia, serif`;
       ctx.textBaseline = 'middle';
-      ctx.fillText(email(), Math.min(34, rect.width * .15), y);
+      ctx.fillText(email(), 0, y);
     }
 
     contact.addEventListener('click', () => { location.href = 'mai' + 'lto:' + email(); });
