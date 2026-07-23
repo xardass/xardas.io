@@ -64,45 +64,14 @@
       text-transform: uppercase;
       user-select: none;
     }
-    .contact-sigil {
-      position: absolute;
-      left: clamp(1.15rem, 2.4vw, 2.2rem);
-      bottom: clamp(1.1rem, 2.4vw, 2rem);
-      z-index: 2;
-      width: clamp(13rem, 22vw, 19rem);
-      height: clamp(2.6rem, 4.8vw, 3.5rem);
-      opacity: .78;
-      cursor: pointer;
-      border: 0;
-      padding: 0;
-      background: transparent;
-      transform-origin: left center;
-      transition: opacity 220ms ease, transform 220ms ease, filter 220ms ease;
-    }
-    .contact-sigil canvas { display: block; width: 100%; height: 100%; }
-    .contact-sigil:hover,
-    .contact-sigil:focus-visible {
-      opacity: 1;
-      transform: translateX(3px);
-      filter: drop-shadow(0 0 9px rgba(221,213,192,.12));
-    }
-    .contact-sigil:focus-visible { outline: 1px solid rgba(232,225,207,.55); outline-offset: 6px; }
 
-    @media (prefers-reduced-motion: reduce) {
-      .contact-sigil { transition: none; }
-    }
 
     @media (max-width: 720px) {
       .tower-glimpse {
         width: 100vw;
         opacity: .24;
       }
-      .contact-sigil {
-        left: 1rem;
-        bottom: max(1rem, env(safe-area-inset-bottom));
-        width: min(72vw, 16rem);
-        height: 3rem;
-      }
+
     }
   </style>
 </head>
@@ -110,36 +79,6 @@
   <main class="page" aria-label="Xardas landing page">
     <div class="tower-glimpse" aria-hidden="true"></div>
     <p class="wordmark">Xardas</p>
-    <button class="contact-sigil" type="button" aria-label="Email Xavier">
-      <canvas></canvas>
-    </button>
   </main>
-
-  <script>
-    const contact = document.querySelector('.contact-sigil');
-    const canvas = contact.querySelector('canvas');
-    const emailCodes = [120,97,118,105,101,114,64,120,97,114,100,97,115,46,105,111];
-    const email = () => String.fromCharCode(...emailCodes);
-
-    function drawContact() {
-      const rect = contact.getBoundingClientRect();
-      const dpr = Math.min(2, devicePixelRatio || 1);
-      canvas.width = Math.max(1, Math.round(rect.width * dpr));
-      canvas.height = Math.max(1, Math.round(rect.height * dpr));
-      const ctx = canvas.getContext('2d');
-      ctx.scale(dpr, dpr);
-      ctx.clearRect(0, 0, rect.width, rect.height);
-      const y = rect.height * .53;
-
-      ctx.fillStyle = 'rgba(237,231,214,.90)';
-      ctx.font = `${Math.max(15, Math.min(21, rect.height * .43))}px Georgia, serif`;
-      ctx.textBaseline = 'middle';
-      ctx.fillText(email(), 0, y);
-    }
-
-    contact.addEventListener('click', () => { location.href = 'mai' + 'lto:' + email(); });
-    addEventListener('resize', drawContact);
-    drawContact();
-  </script>
 </body>
 </html>
