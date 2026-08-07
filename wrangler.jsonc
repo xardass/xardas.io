@@ -1,0 +1,15 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "xardas-io",
+  "account_id": "1a2b8fef3732962092f1973ff1882209",
+  "compatibility_date": "2026-08-07",
+  "assets": {
+    "directory": "./public"
+  },
+  "routes": [
+    {
+      "pattern": "xardas.io",
+      "custom_domain": true
+    }
+  ]
+}
